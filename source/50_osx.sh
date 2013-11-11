@@ -1,0 +1,28 @@
+# OSX-only stuff. Abort if not OSX.
+[[ "$OSTYPE" =~ ^darwin ]] || return 1
+
+# APPLE, Y U PUT /usr/bin B4 /usr/local/bin?!
+PATH=/usr/local/bin:$(path_remove /usr/local/bin)
+export PATH
+
+# Trim new lines and copy to clipboard
+alias c="tr -d '\n' | pbcopy"
+
+# Make 'less' more.
+eval "$(lesspipe.sh)"
+
+# Start ScreenSaver. This will lock the screen if locking is enabled.
+alias ss="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+
+# convert text to audio file
+function speak () {
+	echo
+	echo 'Converting text to speech'
+	echo
+
+	say $1 -o input.aiff
+
+	afconvert -v -c 1 -f WAVE -d LEI16@22050 input.aiff output.wav
+	
+	rm input.aiff
+}
