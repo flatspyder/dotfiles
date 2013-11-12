@@ -321,3 +321,6 @@ let g:airline#extensions#tabline#enabled = 1
 set backupdir=~/.vim/tmp/backup//
 set directory=~/.vim/tmp/swap//
 set backup
+
+" Set sign column to match line number column
+highlight clear SignColumn
