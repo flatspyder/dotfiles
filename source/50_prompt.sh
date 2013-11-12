@@ -69,7 +69,7 @@ function prompt_git() {
   if [[ "$flags" ]]; then
       output="$c4$output$c5$flags"
   fi
-  echo "$c4$output"
+  echo "$c4$output "
 }
 
 # hg status.
@@ -90,7 +90,7 @@ function prompt_hg() {
   if [[ "$flags" ]]; then
       output="$c4$output$c5$flags"
   fi
-  echo "$c4$output"
+  echo "$c4$output "
 }
 
 # SVN info.
@@ -133,7 +133,7 @@ function prompt_command() {
   # misc: [cmd#:hist#]
   # PS1="$PS1$c1[$c0#\#$c1:$c0!\!$c1]$c9"
   # hostname: host:
-  PS1="$c3\h$c1: $PS1$c1 "
+  PS1="$c3\h$c1: $PS1$c1"
   # path: [user@host:path]
   #PS1="$PS1$c1[$c0\u$c1@$c0\h$c1:$c0\w$c1]$c9"
   #PS1="$PS1\n"
