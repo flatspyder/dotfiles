@@ -46,7 +46,7 @@ Bundle 'mattn/emmet-vim'
 "Bundle 'motemen/git-vim'
 Bundle 'tpope/vim-fugitive'
 " Tab list panel
-Bundle 'kien/tabman.vim'
+"Bundle 'kien/tabman.vim'
 " Airline
 Bundle 'bling/vim-airline'
 " Terminal Vim with 256 colors colorscheme
@@ -76,6 +76,8 @@ Bundle 'vim-scripts/indentpython.vim--nianyang'
 Bundle 'nvie/vim-flake8'
 " Search and read python documentation
 Bundle 'fs111/pydoc.vim'
+" Syntax checking for many languages
+Bundle 'scrooloose/syntastic'
 
 " Bundles from vim-scripts repos
 
@@ -228,6 +230,8 @@ function! CtrlPWithSearchText(search_text, ctrlp_command_end)
     execute ':CtrlP' . a:ctrlp_command_end
     call feedkeys(a:search_text)
 endfunction
+
+
 " CtrlP with default text
 nmap ,wg :call CtrlPWithSearchText(expand('<cword>'), 'BufTag')<CR>
 nmap ,wG :call CtrlPWithSearchText(expand('<cword>'), 'BufTagAll')<CR>
