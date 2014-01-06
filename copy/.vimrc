@@ -144,10 +144,6 @@ set formatoptions=qrn1
 " automatically change current directory to that of the file in the buffer
 autocmd BufEnter * cd %:p:h
 
-" set typeface and size
-set guifont=Menlo\ Regular\ for\ Powerline:h13
-set linespace=3
-
 " toggle Tagbar display
 map <F4> :TagbarToggle<CR>
 " autofocus on Tagbar open
@@ -294,11 +290,6 @@ if &term =~? 'mlterm\|xterm\|screen-256'
 else
     " color
     colorscheme delek
-endif
-
-" colors for gvim
-if has('gui_running')
-    colorscheme wombat
 endif
 
 " when scrolling, keep cursor 3 lines away from screen border
