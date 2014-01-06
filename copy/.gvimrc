@@ -1,12 +1,11 @@
-" set typeface and size
+" set typeface and linespacing
 if has("gui_gtk2")
-    set guifont=Menlo for Powerline 10
+    set guifont=Menlo\ for\ Powerline\ 11
+    set linespace=1
 elseif has("gui_macvim")
     set guifont=Menlo\ Regular\ for\ Powerline:h13
+    set linespace=2
 endif
-
-" set linespacing
-set linespace=3
 
 " colors for gvim
 colorscheme wombat
