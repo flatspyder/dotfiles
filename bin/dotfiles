@@ -177,6 +177,10 @@ shopt -s nullglob
 # Create caches directory, if it doesn't already exist.
 mkdir -p "$HOME/.dotfiles/caches"
 
+# Create vim tmp directories if they don't already exist.
+mkdir -p "$HOME/.vim/tmp/backup"
+mkdir -p "$HOME/.vim/tmp/swap"
+
 # If backups are needed, this is where they'll go.
 backup_dir="$HOME/.dotfiles/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
 backup=
