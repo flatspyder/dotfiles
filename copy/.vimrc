@@ -114,7 +114,7 @@ set shiftwidth=4
 " tablength exceptions
 autocmd FileType html setlocal shiftwidth=2 tabstop=2
 autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType css setlocal shiftwidth=2 tabstop=2
 
 " always show status bar
@@ -128,6 +128,10 @@ set hlsearch
 
 " syntax highlight on
 syntax on
+
+" highlight trailing whitespace
+let c_space_errors = 1
+let javascript_space_errors = 1
 
 " line numbers
 set number
