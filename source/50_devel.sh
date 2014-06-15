@@ -7,9 +7,6 @@ export GOPATH=$HOME/src/gocode
 PATH=$(path_remove /usr/local/go/bin):/usr/local/go/bin
 PATH=$(path_remove $GOPATH/bin):$GOPATH/bin
 
-# Add Go appengine binaries to path
-PATH=$(path_remove ~/src/go_appengine):~/src/go_appengine
-
 # Virtualenv should use Distribute instead of legacy setuptools
 export VIRTUALENV_DISTRIBUTE=true
 
