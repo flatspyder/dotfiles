@@ -1,17 +1,14 @@
 "Undo vi compatibility
 set nocompatible
 
-" source Golang plugin
-set rtp+=/usr/local/go/misc/vim
-
 " Setting up Vundle - the vim plugin bundler
 let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 if !filereadable(vundle_readme)
     echo "Installing Vundle..."
     echo ""
     silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    silent !git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     let iCanHazVundle=0
 endif
 
@@ -19,87 +16,91 @@ endif
 filetype on " required for Mac system VIM
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
-" Bundles from GitHub repos:
+" Plugins from GitHub repos:
 
 " Python and PHP Debugger
-"Bundle 'fisadev/vim-debug.vim'
+"Plugin 'fisadev/vim-debug.vim'
 " Better file browser
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 " Code commenter
-Bundle 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 " Class/module browser
-Bundle 'majutsushi/tagbar'
+Plugin 'majutsushi/tagbar'
 " Code and files fuzzy finder
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
-Bundle 'fisadev/vim-ctrlp-cmdpalette'
+Plugin 'fisadev/vim-ctrlp-cmdpalette'
 " Zen coding
-Bundle 'mattn/emmet-vim'
+Plugin 'mattn/emmet-vim'
 " Git integration
-"Bundle 'motemen/git-vim'
-Bundle 'tpope/vim-fugitive'
+"Plugin 'motemen/git-vim'
+Plugin 'tpope/vim-fugitive'
 " Tab list panel
-"Bundle 'kien/tabman.vim'
+"Plugin 'kien/tabman.vim'
 " Airline
-Bundle 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 " Terminal Vim with 256 colors colorscheme
-Bundle 'fisadev/fisa-vim-colorscheme'
+Plugin 'fisadev/fisa-vim-colorscheme'
 " Consoles as buffers
-Bundle 'rosenfeld/conque-term'
+Plugin 'rosenfeld/conque-term'
 " Pending tasks list
-Bundle 'fisadev/FixedTaskList.vim'
+Plugin 'fisadev/FixedTaskList.vim'
 " Surround
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 " Autoclose
-Bundle 'Townk/vim-autoclose'
+Plugin 'Townk/vim-autoclose'
 " Indent text object
-Bundle 'michaeljsmith/vim-indent-object'
+Plugin 'michaeljsmith/vim-indent-object'
 " Python autocompletion and documentation
-Bundle 'davidhalter/jedi-vim'
+Plugin 'davidhalter/jedi-vim'
 " Snippets manager (SnipMate), dependencies, and snippets repo
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'honza/vim-snippets'
-Bundle 'garbas/vim-snipmate'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'honza/vim-snippets'
+Plugin 'garbas/vim-snipmate'
 " Git diff icons on the side of the file lines
-Bundle 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'
 " Better python indentation
-Bundle 'vim-scripts/indentpython.vim--nianyang'
+Plugin 'vim-scripts/indentpython.vim--nianyang'
 " PEP8 and python-flakes checker
-Bundle 'nvie/vim-flake8'
+Plugin 'nvie/vim-flake8'
 " Search and read python documentation
-Bundle 'fs111/pydoc.vim'
+Plugin 'fs111/pydoc.vim'
 " Syntax checking for many languages
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
+" Go development plugin
+Plugin 'fatih/vim-go'
 
-" Bundles from vim-scripts repos
+" Plugins from vim-scripts repos
 
 " Autocompletion
-Bundle 'AutoComplPop'
+Plugin 'AutoComplPop'
 " Python code checker
-Bundle 'pyflakes.vim'
+Plugin 'pyflakes.vim'
 " Search results counter
-Bundle 'IndexedSearch'
+Plugin 'IndexedSearch'
 " XML/HTML tags navigation
-Bundle 'matchit.zip'
+Plugin 'matchit.zip'
 " Gvim colorscheme
-Bundle 'Wombat'
+Plugin 'Wombat'
 " Yank history navigation
-Bundle 'YankRing.vim'
+Plugin 'YankRing.vim'
 
 " Installing plugins the first time
 if iCanHazVundle == 0
-    echo "Installing Bundles, please ignore key map error messages"
+    echo "Installing Plugins, please ignore key map error messages"
     echo ""
-    :BundleInstall
+    :PluginInstall
 endif
+
+call vundle#end()
 
 " allow plugins by file type
 filetype plugin on
