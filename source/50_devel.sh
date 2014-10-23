@@ -7,6 +7,11 @@ export GOPATH=$HOME/src/gocode
 PATH=$(path_remove /usr/local/go/bin):/usr/local/go/bin
 PATH=$(path_remove $GOPATH/bin):$GOPATH/bin
 
+# Set GOROOT for AppEngine when using vim on Mac
+if [[ "$OSTYPE" =~ ^darwin ]]; then 
+    alias appvim="export GOROOT=/usr/local/share/go-app-engine-64/goroot && mvim"
+fi
+
 # Virtualenv should use Distribute instead of legacy setuptools
 export VIRTUALENV_DISTRIBUTE=true
 
