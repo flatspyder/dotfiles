@@ -14,13 +14,30 @@ else
     recipes=(
         ctags protobuf
         python lesspipe nmap
-        tree
+        tree zsh
     )
 
     list="$(to_install "${recipes[*]}" "$(brew list)")"
     if [[ "$list" ]]; then
         e_header "Installing Homebrew recipes: $list"
         brew install $list
+    fi
+
+    # Install Quicklook plugins.
+    recipes=(
+        suspicious-package
+        quicklook-json
+        qlmarkdown
+        qlstephen
+        qlcolorcode
+    )
+
+    list="$(to_install "${recipes[*]}" "$(brew list)")"
+    if [[ "$list" ]]; then
+        e_header "Installing Quick Look plugins: $list"
+        brew tap phinze/homebrew-cask
+        brew install brew-cask
+        brew cask install $list
     fi
 
     # This is where brew stores its binary symlinks
