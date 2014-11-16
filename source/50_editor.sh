@@ -1,19 +1,12 @@
 # Editing
-
-if [[ ! "$SSH_TTY" && "$OSTYPE" =~ ^darwin ]]; then
+if [[ ! "$SSH_TTY" ]] && is_osx; then
   export EDITOR='mvim -f'
-  export LESSEDIT='mvim'
-  alias q='mvim'
+  export LESSEDIT='mvim ?lm+%lm -- %f'
 else
   export EDITOR=$(type nano pico vi vim 2>/dev/null | sed 's/ .*$//;q')
-  alias q="$EDITOR -w -z"
 fi
 
 export VISUAL="$EDITOR"
-
-alias q.='q .'
-
-function qs() {
-  pwd | perl -ne"s#^$(echo ~/.dotfiles)## && exit 1" && cd ~/.dotfiles
-  q ~/.dotfiles
-}
+alias q="$EDITOR"
+alias qv="q $DOTFILES/link/.{,g}vimrc +'cd $DOTFILES'"
+alias qs="q +'cd $DOTFILES'"
