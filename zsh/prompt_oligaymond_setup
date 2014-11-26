@@ -1,0 +1,103 @@
+# Simple zsh prompt.
+#
+# dotfiles ❯ (default)
+# dotfiles master ❯ (in git repository)
+# root@serv dotfiles master ❯ (with SSH)
+#
+# * is prepended to git branch name if repo is dirty.
+# ❯ is red if previous command exit status was 1.
+#
+# Author: Oli Gaymond (oli.gaymond.co.uk)
+
+vcs_info=''
+
+# turns seconds into human readable time
+# 165392 => 1d 21h 56m 32s
+prompt_oligaymond_human_time() {
+	local tmp=$1
+	local days=$(( tmp / 60 / 60 / 24 ))
+	local hours=$(( tmp / 60 / 60 % 24 ))
+	local minutes=$(( tmp / 60 % 60 ))
+	local seconds=$(( tmp % 60 ))
+	(( $days > 0 )) && echo -n "${days}d "
+	(( $hours > 0 )) && echo -n "${hours}h "
+	(( $minutes > 0 )) && echo -n "${minutes}m "
+	echo "${seconds}s"
+}
+
+# displays the exec time of the last command if set threshold was exceeded
+prompt_oligaymond_cmd_exec_time() {
+	local stop=$EPOCHSECONDS
+	local start=${cmd_timestamp:-$stop}
+	integer elapsed=$stop-$start
+	(($elapsed > ${OLIGAYMOND_CMD_MAX_EXEC_TIME:=5})) && prompt_oligaymond_human_time $elapsed
+}
+
+prompt_oligaymond_preexec() {
+	cmd_timestamp=$EPOCHSECONDS
+}
+
+prompt_oligaymond_precmd() {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  local TERMWIDTH
+  (( TERMWIDTH = ${COLUMNS} - 1 ))
+
+  local exec_time=`prompt_oligaymond_cmd_exec_time`
+  if [[ -n "$exec_time" ]]; then
+      local prompt_oligaymond_preprompt="%F{yellow}$exec_time%f"
+      print -P $prompt_oligaymond_preprompt
+  fi
+
+  # reset value since `preexec` isn't always triggered
+  unset cmd_timestamp
+}
+
+function list-files {
+  echo `script -q /dev/null ls -G . | tr -d '\r' | cat`
+}
+
+# branch \ue0a0
+# plus-minus \u2213
+# lightning \u26a1
+
+get-vcs-info() {
+  local branch_symbol=""
+  vcs_info=''
+  git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  local ref=$(git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||')
+  if [[ -z "$ref" ]]; then
+    vcs_info=''
+  else
+    st=`git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo 'dirty'`
+    if [[ -z "$st" ]]; then
+      vcs_info="%F{yellow}${ref} ${branch_symbol}%f"
+    else
+      vcs_info="%F{red}${ref} ${branch_symbol}%f"
+    fi
+  fi
+}
+
+prompt_oligaymond_setup() {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  prompt_opts=(cr percent subst)
+
+  zmodload zsh/datetime
+  autoload -Uz add-zsh-hook
+
+  add-zsh-hook precmd prompt_oligaymond_precmd
+  add-zsh-hook precmd get-vcs-info
+  add-zsh-hook preexec prompt_oligaymond_preexec
+  add-zsh-hook chpwd list-files
+  add-zsh-hook chpwd get-vcs-info
+
+  PROMPT='%F{magenta}${SSH_TTY:+%n@}%m%f %(!.%B%F{red}# %f%b.%B%(?.%F{white}.%F{red})❯%f%b) '
+  RPROMPT='${vcs_info}'
+  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]?'
+}
+
+prompt_oligaymond_setup "$@"
