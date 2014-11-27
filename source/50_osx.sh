@@ -1,19 +1,31 @@
 # OSX-only stuff. Abort if not OSX.
 is_osx || return 1
 
-# APPLE, Y U PUT /usr/bin B4 /usr/local/bin?!
-PATH=/usr/local/bin:$(path_remove /usr/local/bin)
-PATH=/usr/local/sbin:$(path_remove /usr/local/sbin)
-export PATH
-
 # Trim new lines and copy to clipboard
 alias c="tr -d '\n' | pbcopy"
+#alias c='pbcopy'
+alias p='pbpaste'
 
 # Make 'less' more.
-[[ "$(type -P lesspipe.sh)" ]] && eval "$(lesspipe.sh)"
+[ "$(command -v lesspipe.sh >/dev/null 2>&1)" ] && eval "$(lesspipe.sh)"
 
-# Start ScreenSaver. This will lock the screen if locking is enabled.
-alias ss="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+# Lock current session and proceed to the login screen.
+alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+
+# Sniff network info.
+alias sniff="sudo ngrep -d 'en0' -t '^(GET|POST) ' 'tcp and port 80'"
+
+# Process grep should output full paths to binaries.
+alias pgrep='pgrep -fli'
+
+# Show current Finder directory.
+function finder {
+  osascript 2>/dev/null <<EOF
+    tell application "Finder"
+      return POSIX path of (target of window 1 as alias)
+    end tell
+EOF
+}
 
 # convert text to audio file
 function speak () {

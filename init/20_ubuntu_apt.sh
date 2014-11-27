@@ -12,6 +12,7 @@ packages=(
   git-core
   htop
   libssl-dev
+  ngrep
   nmap
   telnet
   tree

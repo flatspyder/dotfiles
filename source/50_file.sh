@@ -12,7 +12,7 @@ else
 fi
 
 # Directory listing
-if [[ "$(type -P tree)" ]]; then
+if [ "$(command -v tree >/dev/null 2>&1)" ]; then
   alias ll='tree --dirsfirst -aLpughDFiC 1'
   alias lsd='ll -d'
 else
@@ -40,8 +40,42 @@ function md() {
   mkdir -p "$@" && cd "$@"
 }
 
-# Fast directory switching
-mkdir -p $DOTFILES/caches/z
-_Z_NO_PROMPT_COMMAND=1
-_Z_DATA=$DOTFILES/caches/z/z
-. $DOTFILES/libs/z/z.sh
+# Opens file in EDITOR.
+function edit() {
+  local dir=$1
+  [[ -z "$dir" ]] && dir='.'
+  $EDITOR $dir
+}
+alias e=edit
+
+# Execute commands for each file in current directory.
+function each() {
+  for dir in *; do
+    echo "${dir}:"
+    cd $dir
+    $@
+    cd ..
+  done
+}
+
+# Find files and exec commands at them.
+# $ find-exec .coffee cat | wc -l
+# # => 9762
+function find-exec() {
+  find . -type f -iname "*${1:-}*" -exec "${2:-file}" '{}' \;
+}
+
+# Better find(1)
+function ff() {
+  find . -iname "*${1:-}*"
+}
+
+# $ aes-enc file.zip
+function aes-enc() {
+  openssl enc -aes-256-cbc -e -in $1 -out "$1.aes"
+}
+
+# $ aes-dec file.zip.aes
+function aes-dec() {
+  openssl enc -aes-256-cbc -d -in $1 -out "${1%.*}"
+}

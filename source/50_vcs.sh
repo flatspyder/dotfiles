@@ -1,18 +1,26 @@
 # Git shortcuts
 
 alias g='git'
-function ga() { git add "${@:-.}"; } # Add all files by default
+alias ga='git add'
 alias gp='git push'
 alias gpa='gp --all'
 alias gu='git pull'
-alias gl='git log'
+alias gf='git fetch'
+alias gl='git log --no-merges'
 alias gg='gl --decorate --oneline --graph --date-order --all'
-alias gs='git status'
-alias gst='gs'
+alias gs='git status --short'
+alias gst='git status'
 alias gd='git diff'
 alias gdc='gd --cached'
-alias gc='git commit -m'
-alias gca='git commit -am'
+alias gds='gd --staged'
+function gc() {
+  args=$@
+  git commit -m "$args"
+}
+function gca() {
+  args=$@
+  git commit --amend -m "$args"
+}
 alias gb='git branch'
 alias gba='git branch -a'
 function gco() { git checkout "${@:-master}"; } # Checkout master by default
@@ -23,11 +31,6 @@ alias grv='gr -v'
 alias grr='git remote rm'
 alias gcl='git clone'
 alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
-
-# Run commands in each subdirectory.
-alias gu-all='eachdir git pull'
-alias gp-all='eachdir git push'
-alias gs-all='eachdir git status'
 
 # open all changed files (that still actually exist) in the editor
 function ged() {
@@ -54,7 +57,7 @@ function gra() {
 # git log with per-commit cmd-clickable GitHub URLs (iTerm)
 function gf() {
   local remote="$(git remote -v | awk '/^origin.*\(push\)$/ {print $2}')"
-  [[ "$remote" ]] || return
+  [ "$remote" ] || return
   local user_repo="$(echo "$remote" | perl -pe 's/.*://;s/\.git$//')"
   git log $* --name-status --color | awk "$(cat <<AWK
     /^.*commit [0-9a-f]{40}/ {sha=substr(\$2,1,7)}
@@ -71,7 +74,7 @@ for n in {1..5}; do alias gf$n="gf -n $n"; done
 if is_osx; then
   alias gdk='git ksdiff'
   alias gdkc='gdk --cached'
-  if [[ ! "$SSH_TTY" ]]; then
+  if [ ! "$SSH_TTY" ]; then
     alias gd='gdk'
   fi
 fi

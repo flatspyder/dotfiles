@@ -8,6 +8,7 @@ is_osx || return 1
 recipes=(
   ctags
   lesspipe
+  ngrep
   nmap
   protobuf
   python
