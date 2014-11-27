@@ -52,6 +52,11 @@ prompt_oligaymond_precmd() {
 
   # reset value since `preexec` isn't always triggered
   unset cmd_timestamp
+
+}
+
+function title_prompt {
+    print -Pn "\e]0;%n@%m: %~\a"
 }
 
 function list-files {
@@ -92,8 +97,9 @@ prompt_oligaymond_setup() {
   add-zsh-hook precmd prompt_oligaymond_precmd
   add-zsh-hook precmd get-vcs-info
   add-zsh-hook preexec prompt_oligaymond_preexec
-  add-zsh-hook chpwd list-files
-  add-zsh-hook chpwd get-vcs-info
+  add-zsh-hook chpwd title_prompt
+  #add-zsh-hook chpwd list-files
+  #add-zsh-hook chpwd get-vcs-info
 
   PROMPT='%F{magenta}${SSH_TTY:+%n@}%m%f %(!.%B%F{red}# %f%b.%B%(?.%F{white}.%F{red})❯%f%b) '
   RPROMPT='${vcs_info}'
