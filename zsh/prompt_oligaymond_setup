@@ -44,7 +44,8 @@ prompt_oligaymond_precmd() {
   local TERMWIDTH
   (( TERMWIDTH = ${COLUMNS} - 1 ))
 
-  local exec_time=`prompt_oligaymond_cmd_exec_time`
+  local exec_time
+  exec_time=`prompt_oligaymond_cmd_exec_time`
   if [[ -n "$exec_time" ]]; then
       local prompt_oligaymond_preprompt="%F{yellow}$exec_time%f"
       print -P $prompt_oligaymond_preprompt
