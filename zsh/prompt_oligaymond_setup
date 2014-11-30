@@ -9,8 +9,6 @@
 #
 # Author: Oli Gaymond (oli.gaymond.co.uk)
 
-vcs_info=''
-
 # turns seconds into human readable time
 # 165392 => 1d 21h 56m 32s
 prompt_oligaymond_human_time() {
@@ -53,7 +51,6 @@ prompt_oligaymond_precmd() {
 
   # reset value since `preexec` isn't always triggered
   unset cmd_timestamp
-
 }
 
 function title_prompt {
@@ -64,26 +61,86 @@ function list-files {
   echo `script -q /dev/null ls -G . | tr -d '\r' | cat`
 }
 
+begin_with() {
+    local string="${1}"
+    shift
+    local element=''
+    for element in "$@"; do
+        if [[ "${string}" =~ "^${element}" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+git_check_if_worktree() {
+    # Check if the current path is in a git repo. Only to be executed in chpwd().
+
+    # The : separated list of paths where we will run check for git repo.
+    # If not set, then we will do it only for /root and /home.
+    if [ "${UID}" = '0' ]; then
+        # running 'git' in repo changes owner of git's index files to root, skip prompt git magic if CWD=/home/*
+        git_check_if_workdir_path="${git_check_if_workdir_path:-/root:/etc}"
+    else
+        git_check_if_workdir_path="${git_check_if_workdir_path:-/home:/Users}"
+        git_check_if_workdir_path_exclude="${git_check_if_workdir_path_exclude:-${HOME}/_sshfs}"
+    fi
+
+    if begin_with "${PWD}" ${=git_check_if_workdir_path//:/ }; then
+        if ! begin_with "${PWD}" ${=git_check_if_workdir_path_exclude//:/ }; then
+            local git_pwd_is_worktree_match='true'
+        else
+            local git_pwd_is_worktree_match='false'
+        fi
+    fi
+
+    if ! [ "${git_pwd_is_worktree_match}" = 'true' ]; then
+        git_pwd_is_worktree='false'
+        return 1
+    fi
+
+    # todo: Prevent checking for /.git or /home/.git, if PWD=/home or PWD=/ maybe...
+    #   damn annoying RBAC messages about Access denied there.
+    if [ -d '.git' ] || [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
+        git_pwd_is_worktree='true'
+        git_worktree_is_bare="$(git config core.bare)"
+    else
+        unset git_branch git_worktree_is_bare
+        git_pwd_is_worktree='false'
+    fi
+}
+
+git_branch() {
+    git_branch="$(git symbolic-ref -q --short HEAD)"
+    git_branch="${git_branch:-no branch}"
+}
+
+git_dirty() {
+    if [ "${git_worktree_is_bare}" = 'false' ] && [ -n "$(git status --untracked-files='no' --porcelain)" ]; then
+        git_dirty='true'
+    else
+        unset git_dirty
+    fi
+}
+
 # branch \ue0a0
 # plus-minus \u2213
 # lightning \u26a1
 
-get-vcs-info() {
-  local branch_symbol=""
-  vcs_info=''
-  git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local ref=$(git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||')
-  if [[ -z "$ref" ]]; then
-    vcs_info=''
-  else
-    st=`git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo 'dirty'`
-    if [[ -z "$st" ]]; then
-      vcs_info="%F{yellow}${ref} ${branch_symbol}%f"
+git_status() {
+    if [ "${git_pwd_is_worktree}" = 'true' ]; then
+        local branch_symbol=""
+        git_branch
+        git_dirty
+        
+        if [[ -z "$git_dirty" ]]; then
+            git_prompt="%B%F{black}${git_branch} ${branch_symbol}%b%f"
+        else
+            git_prompt="%F{red}${git_branch} ${branch_symbol}%f"
+        fi
     else
-      vcs_info="%F{red}${ref} ${branch_symbol}%f"
-    fi
-  fi
+        unset git_prompt
+    fi   
 }
 
 prompt_oligaymond_setup() {
@@ -92,18 +149,20 @@ prompt_oligaymond_setup() {
 
   prompt_opts=(cr percent subst)
 
+  # disables prompt mangling in virtual_env/bin/activate
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
+
   zmodload zsh/datetime
   autoload -Uz add-zsh-hook
 
   add-zsh-hook precmd prompt_oligaymond_precmd
-  add-zsh-hook precmd get-vcs-info
+  add-zsh-hook precmd git_status
   add-zsh-hook preexec prompt_oligaymond_preexec
   add-zsh-hook chpwd title_prompt
-  #add-zsh-hook chpwd list-files
-  #add-zsh-hook chpwd get-vcs-info
+  add-zsh-hook chpwd git_check_if_worktree
 
-  PROMPT='%F{magenta}${SSH_TTY:+%n@}%m%f %(!.%B%F{red}# %f%b.%B%(?.%F{white}.%F{red})❯%f%b) '
-  RPROMPT='${vcs_info}'
+  PROMPT='%F{magenta}${SSH_TTY:+%n@}%m%f %F{cyan}${VIRTUAL_ENV:+"($VIRTUAL_ENV:t) "}%f%(!.%B%F{red}# %f%b.%B%(?.%F{white}.%F{red})❯%f%b) '
+  RPROMPT='${git_prompt}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]?'
 }
 
