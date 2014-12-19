@@ -5,7 +5,7 @@ privenv="$HOME/.private-env"
 # Editors.
 # --------
 export EDITOR='vim'
-export VISUAL='mvim'
+export VISUAL='mvim -f'
 export PAGER='less'
 
 # Language.
