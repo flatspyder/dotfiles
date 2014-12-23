@@ -101,6 +101,9 @@ function retry() {
 bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
 
+# Incremental backward search
+bindkey "^R" history-incremental-pattern-search-backward
+
 # ==================================================================
 # = Shared source files =
 # ==================================================================
