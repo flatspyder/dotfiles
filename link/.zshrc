@@ -97,9 +97,15 @@ function retry() {
   retry $@
 }
 
+# Default emacs command line mode
+bindkey -e
+
 # Who doesn't want home and end to work?
 bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
+
+# Incremental backward search
+bindkey "^R" history-incremental-pattern-search-backward
 
 # ==================================================================
 # = Shared source files =
