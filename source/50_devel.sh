@@ -1,6 +1,3 @@
-# Create Go path for source code
-export GOPATH=$HOME/src/gocode
-
 # Set GOROOT for AppEngine when using vim on Mac
 if is_osx; then 
     alias appvim="export GOROOT=/usr/local/share/go-app-engine-64/goroot && mvim"
@@ -8,18 +5,6 @@ fi
 
 # Pretty print json
 alias json='python -m json.tool'
-
-# Virtualenv should use Distribute instead of legacy setuptools
-export VIRTUALENV_DISTRIBUTE=true
-
-# Centralized location for new virtual environments
-export PIP_VIRTUALENV_BASE=$HOME/Virtualenvs
-
-# Pip should only run if there is a virtualenv currently activated
-#export PIP_REQUIRE_VIRTUALENV=true
-
-# cache pip-installed packages to avoid re-downloading
-export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
 # Count code lines in some directory.
 # $ loc py js css
