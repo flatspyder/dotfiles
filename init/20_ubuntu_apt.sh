@@ -9,6 +9,7 @@ sudo apt-get --qq dist-upgrade
 # Install APT packages.
 packages=(
   build-essential
+  lib32stdc++6
   git-core
   htop
   libssl-dev
