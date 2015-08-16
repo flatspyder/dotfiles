@@ -112,6 +112,7 @@ bindkey "^R" history-incremental-pattern-search-backward
 # ==================================================================
 
 source "$curr/source/50_devel.sh"
+source "$curr/source/50_editor.sh"
 source "$curr/source/50_file.sh"
 source "$curr/source/50_net.sh"
 source "$curr/source/50_osx.sh"
