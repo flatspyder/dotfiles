@@ -2,12 +2,6 @@
 privenv="$HOME/.private-env"
 [[ -f "$privenv" ]] && source $privenv
 
-# Editors.
-# --------
-export EDITOR='vim'
-export VISUAL='mvim'
-export PAGER='less'
-
 # Language.
 # ---------
 if [[ -z "$LANG" ]]; then
