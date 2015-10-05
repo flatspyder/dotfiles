@@ -2,7 +2,7 @@
 export EDITOR='vim'
 export PAGER='less'
 
-if [[ ! "$SSH_TTY" ]] && is_osx; then
+if [[ -n "$SSH_TTY" ]] && is_osx; then
   export VISUAL='mvim -f'
   export LESSEDIT='mvim ?lm+%lm -- %f'
 else
