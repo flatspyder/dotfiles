@@ -78,6 +78,7 @@ alias adb=$ANDROID_HOME/platform-tools/adb
 # export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 path=(
   /usr/local/{bin,sbin}
+  /usr/local/go/bin
   /usr/local/opt/ruby/bin
   /usr/local/lib/python2.7/site-packages
   /usr/local/share/npm/bin
