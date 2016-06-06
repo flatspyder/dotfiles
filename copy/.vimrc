@@ -46,6 +46,7 @@ Plugin 'tpope/vim-fugitive'
 "Plugin 'kien/tabman.vim'
 " Airline
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " Terminal Vim with 256 colors colorscheme
 Plugin 'fisadev/fisa-vim-colorscheme'
 " Consoles as buffers
