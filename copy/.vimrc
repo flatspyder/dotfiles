@@ -34,25 +34,18 @@ Plugin 'scrooloose/nerdcommenter'
 " Class/module browser
 Plugin 'majutsushi/tagbar'
 " Code and files fuzzy finder
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
-" Zen coding
-Plugin 'mattn/emmet-vim'
 " Git integration
-"Plugin 'motemen/git-vim'
 Plugin 'tpope/vim-fugitive'
-" Tab list panel
-"Plugin 'kien/tabman.vim'
 " Airline
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 " Terminal Vim with 256 colors colorscheme
 Plugin 'fisadev/fisa-vim-colorscheme'
 " Consoles as buffers
-Plugin 'rosenfeld/conque-term'
-" Pending tasks list
-Plugin 'fisadev/FixedTaskList.vim'
+"Plugin 'rosenfeld/conque-term'
 " Surround
 Plugin 'tpope/vim-surround'
 " Autoclose
@@ -61,11 +54,9 @@ Plugin 'Townk/vim-autoclose'
 Plugin 'michaeljsmith/vim-indent-object'
 " Python autocompletion and documentation
 Plugin 'davidhalter/jedi-vim'
-" Snippets manager (SnipMate), dependencies, and snippets repo
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
+" Snippets manager UltiSnips and snippets repo
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'garbas/vim-snipmate'
 " Git diff icons on the side of the file lines
 Plugin 'airblade/vim-gitgutter'
 " Better python indentation
@@ -76,6 +67,8 @@ Plugin 'nvie/vim-flake8'
 Plugin 'fs111/pydoc.vim'
 " Syntax checking for many languages
 Plugin 'scrooloose/syntastic'
+" Support virtualenv for Python
+Plugin 'jmcantrell/vim-virtualenv'
 " Go development plugin
 Plugin 'fatih/vim-go'
 
@@ -83,16 +76,12 @@ Plugin 'fatih/vim-go'
 
 " Autocompletion
 Plugin 'AutoComplPop'
-" Python code checker
-Plugin 'pyflakes.vim'
 " Search results counter
 Plugin 'IndexedSearch'
 " XML/HTML tags navigation
 Plugin 'matchit.zip'
 " Gvim colorscheme
 Plugin 'Wombat'
-" Yank history navigation
-Plugin 'YankRing.vim'
 
 " Installing plugins the first time
 if iCanHazVundle == 0
@@ -150,6 +139,9 @@ set formatoptions=qrn1
 " automatically change current directory to that of the file in the buffer
 autocmd BufEnter * cd %:p:h
 
+" Setup virtualenv Support
+let g:virtualenv_directory = '~/Virtualenvs'
+
 " toggle Tagbar display
 map <F4> :TagbarToggle<CR>
 " autofocus on Tagbar open
@@ -169,16 +161,6 @@ imap <C-S-Right> <ESC>:tabn<CR>
 map <C-S-Left> :tabp<CR>
 imap <C-S-Left> <ESC>:tabp<CR>
 
-" navigate windows with meta+arrows
-map <M-Right> <c-w>l
-map <M-Left> <c-w>h
-map <M-Up> <c-w>k
-map <M-Down> <c-w>j
-imap <M-Right> <ESC><c-w>l
-imap <M-Left> <ESC><c-w>h
-imap <M-Up> <ESC><c-w>k
-imap <M-Down> <ESC><c-w>j
-
 " fix some problems with gitgutter and jedi-vim
 let g:gitgutter_eager = 0
 let g:gitgutter_realtime = 0
@@ -190,15 +172,9 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " old autocomplete keyboard shortcut
 imap <C-J> <C-X><C-O>
 
-" show pending tasks list
-map <F2> :TaskList<CR>
-
 " removes trailing spaces of python files
 " (and restores cursor position)
 autocmd BufWritePre *.py mark z | %s/\s\+$//e | 'z
-
-" set yankring to use tmp
-let g:yankring_history_dir='~/.vim/tmp/swap/'
 
 " save as sudo
 "ca w!! w !sudo tee "%"
@@ -279,10 +255,12 @@ let g:jedi#show_call_signatures = "1"
 nmap ,D :tab split<CR>,d
 
 " Change snipmate binding, to avoid problems with jedi-vim
-imap <C-i> <Plug>snipMateNextOrTrigger
+"imap <C-i> <Plug>snipMateNextOrTrigger
 
-" don't let pyflakes allways override the quickfix list
-let g:pyflakes_use_quickfix = 0
+" UltiSnips controls
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " tabman shortcuts
 let g:tabman_toggle = 'tl'
