@@ -32,7 +32,7 @@ Plugin 'scrooloose/nerdtree'
 " Code commenter
 Plugin 'scrooloose/nerdcommenter'
 " Class/module browser
-Plugin 'majutsushi/tagbar'
+"Plugin 'majutsushi/tagbar'
 " Code and files fuzzy finder
 Plugin 'ctrlpvim/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
@@ -96,6 +96,9 @@ call vundle#end()
 filetype plugin on
 filetype indent on
 
+" Encoding default
+set encoding=utf-8
+
 " tabs and spaces handling
 set expandtab
 set tabstop=4
@@ -143,9 +146,9 @@ autocmd BufEnter * cd %:p:h
 let g:virtualenv_directory = '~/Virtualenvs'
 
 " toggle Tagbar display
-map <F4> :TagbarToggle<CR>
+"map <F4> :TagbarToggle<CR>
 " autofocus on Tagbar open
-let g:tagbar_autofocus = 1
+"let g:tagbar_autofocus = 1
 
 " NERDTree (better file browser) toggle
 map <F3> :NERDTreeToggle<CR>
