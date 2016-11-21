@@ -25,6 +25,11 @@ Plugin 'gmarik/Vundle.vim'
 
 " Plugins from GitHub repos:
 
+" Solarized theme
+Plugin 'altercation/vim-colors-solarized'
+" Terminal Vim with 256 colors colorscheme
+"Plugin 'fisadev/fisa-vim-colorscheme'
+
 " Python and PHP Debugger
 "Plugin 'fisadev/vim-debug.vim'
 " Better file browser
@@ -42,10 +47,6 @@ Plugin 'tpope/vim-fugitive'
 " Airline
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-" Terminal Vim with 256 colors colorscheme
-Plugin 'fisadev/fisa-vim-colorscheme'
-" Consoles as buffers
-"Plugin 'rosenfeld/conque-term'
 " Surround
 Plugin 'tpope/vim-surround'
 " Autoclose
@@ -80,8 +81,6 @@ Plugin 'AutoComplPop'
 Plugin 'IndexedSearch'
 " XML/HTML tags navigation
 Plugin 'matchit.zip'
-" Gvim colorscheme
-Plugin 'Wombat'
 
 " Installing plugins the first time
 if iCanHazVundle == 0
@@ -144,11 +143,6 @@ autocmd BufEnter * cd %:p:h
 
 " Setup virtualenv Support
 let g:virtualenv_directory = '~/Virtualenvs'
-
-" toggle Tagbar display
-"map <F4> :TagbarToggle<CR>
-" autofocus on Tagbar open
-"let g:tagbar_autofocus = 1
 
 " NERDTree (better file browser) toggle
 map <F3> :NERDTreeToggle<CR>
@@ -273,7 +267,9 @@ let g:tabman_focus  = 'tf'
 if &term =~? 'mlterm\|xterm\|screen-256'
 	let &t_Co = 256
     " color
-    colorscheme fisa
+    " colorscheme fisa
+    set background=dark
+    colorscheme solarized
 else
     " color
     colorscheme delek
@@ -291,7 +287,7 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " vim-airline settings
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'powerlineish'
+let g:airline_theme = 'solarized'
 let g:airline#extensions#whitespace#enabled = 0
 
 " Just display branches, not hunks as well
