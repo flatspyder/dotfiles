@@ -7,5 +7,8 @@ elseif has("gui_macvim")
     set linespace=2
 endif
 
+set background=dark
+colorscheme solarized
+
 " Remove the toolbar
 set guioptions-=T
