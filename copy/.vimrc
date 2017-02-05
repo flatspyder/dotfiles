@@ -72,6 +72,8 @@ Plugin 'scrooloose/syntastic'
 Plugin 'jmcantrell/vim-virtualenv'
 " Go development plugin
 Plugin 'fatih/vim-go'
+" TypeScript development Plugin
+Plugin 'HerringtonDarkholme/yats.vim'
 
 " Plugins from vim-scripts repos
 
