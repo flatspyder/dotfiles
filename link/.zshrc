@@ -118,3 +118,8 @@ source "$curr/source/50_net.sh"
 source "$curr/source/50_osx.sh"
 source "$curr/source/50_ubuntu.sh"
 source "$curr/source/50_vcs.sh"
+
+if is_osx; then
+    source "$HOME/src/google-cloud-sdk/completion.zsh.inc"
+    source "$HOME/src/google-cloud-sdk/path.zsh.inc"
+fi

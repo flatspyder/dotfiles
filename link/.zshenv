@@ -86,6 +86,7 @@ path=(
   /{bin,sbin}
   $ANDROID_HOME/tools
   $HOME/.dotfiles/bin
+  $HOME/bin
   $HOME/.local/bin
   $HOME/.npm-global/bin
   $path
