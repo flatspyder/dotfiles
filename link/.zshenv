@@ -88,6 +88,7 @@ path=(
   $HOME/.dotfiles/bin
   $HOME/bin
   $HOME/.local/bin
+  $HOME/src/gocode/bin
   $HOME/.npm-global/bin
   $path
 )
