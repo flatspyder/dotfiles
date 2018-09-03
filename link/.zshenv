@@ -83,7 +83,9 @@ path=(
   /usr/{bin,sbin}
   /{bin,sbin}
   $HOME/.dotfiles/bin
+  $HOME/bin
   $HOME/.local/bin
+  $HOME/src/gocode/bin
   $HOME/.npm-global/bin
   $HOME/src/flutter/bin
   $path
