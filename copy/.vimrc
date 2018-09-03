@@ -26,9 +26,11 @@ Plugin 'gmarik/Vundle.vim'
 " Plugins from GitHub repos:
 
 " Solarized theme
-Plugin 'altercation/vim-colors-solarized'
+"Plugin 'altercation/vim-colors-solarized'
 " Terminal Vim with 256 colors colorscheme
 "Plugin 'fisadev/fisa-vim-colorscheme'
+" Base16 theme
+Plugin 'chriskempson/base16-vim'
 
 " Python and PHP Debugger
 "Plugin 'fisadev/vim-debug.vim'
@@ -268,12 +270,16 @@ let g:tabman_focus  = 'tf'
 " use 256 colors when possible
 if &term =~? 'mlterm\|xterm\|screen-256'
 	let &t_Co = 256
+    let base16colorspace=256
     " color
     " colorscheme fisa
-    set background=dark
-    colorscheme solarized
+    "set background=dark
+    "colorscheme solarized
+endif
+
+if filereadable(expand("~/.vimrc_background"))
+    source ~/.vimrc_background
 else
-    " color
     colorscheme delek
 endif
 

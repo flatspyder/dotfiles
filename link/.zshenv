@@ -46,9 +46,6 @@ typeset -gUT INFOPATH infopath
 # Commonly used directories.
 dev="$HOME/Developer"
 
-export ANDROID_HOME="$HOME/src/android-sdk/"
-
-# Set the the list of directories that cd searches.
 cdpath=(
   $cdpath
 )
@@ -77,6 +74,7 @@ alias adb=$ANDROID_HOME/platform-tools/adb
 # Set the list of directories that Zsh searches for programs.
 # export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 path=(
+  $HOME/anaconda2/bin
   /usr/local/{bin,sbin}
   /usr/local/go/bin
   /usr/local/opt/ruby/bin
@@ -84,10 +82,10 @@ path=(
   /usr/local/share/npm/bin
   /usr/{bin,sbin}
   /{bin,sbin}
-  $ANDROID_HOME/tools
   $HOME/.dotfiles/bin
   $HOME/.local/bin
   $HOME/.npm-global/bin
+  $HOME/src/flutter/bin
   $path
 )
 

@@ -111,6 +111,7 @@ bindkey "^R" history-incremental-pattern-search-backward
 # = Shared source files =
 # ==================================================================
 
+source "$curr/source/50_theme.sh"
 source "$curr/source/50_devel.sh"
 source "$curr/source/50_editor.sh"
 source "$curr/source/50_file.sh"
@@ -118,3 +119,15 @@ source "$curr/source/50_net.sh"
 source "$curr/source/50_osx.sh"
 source "$curr/source/50_ubuntu.sh"
 source "$curr/source/50_vcs.sh"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/oli/src/google-cloud-sdk/path.zsh.inc' ]; then source '/home/oli/src/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/oli/src/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/oli/src/google-cloud-sdk/completion.zsh.inc'; fi
+
+PATH="/home/oli/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/oli/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/oli/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/oli/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/oli/perl5"; export PERL_MM_OPT;
