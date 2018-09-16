@@ -74,7 +74,6 @@ alias adb=$ANDROID_HOME/platform-tools/adb
 # Set the list of directories that Zsh searches for programs.
 # export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 path=(
-  $HOME/anaconda2/bin
   /usr/local/{bin,sbin}
   /usr/local/go/bin
   /usr/local/opt/ruby/bin
@@ -118,3 +117,7 @@ export PIP_VIRTUALENV_BASE=$HOME/Virtualenvs
 
 # cache pip-installed packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+
+# Use Anaconda to Path
+condaenv="$HOME/anaconda2/etc/profile.d/conda.csh"
+[[ -f "$condaenv" ]] && source $condaenv
