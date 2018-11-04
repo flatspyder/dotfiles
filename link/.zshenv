@@ -121,3 +121,5 @@ export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 # Use Anaconda to Path
 condaenv="$HOME/anaconda2/etc/profile.d/conda.sh"
 [[ -f "$condaenv" ]] && source $condaenv
+condaenv="$HOME/miniconda3/etc/profile.d/conda.sh"
+[[ -f "$condaenv" ]] && source $condaenv
