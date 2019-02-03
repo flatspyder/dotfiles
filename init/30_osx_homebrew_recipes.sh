@@ -13,6 +13,7 @@ recipes=(
   protobuf
   python
   tree
+  vim
   zsh
 )
 
