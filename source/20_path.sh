@@ -10,5 +10,8 @@ fi
 PATH=$(path_remove /usr/local/go/bin):/usr/local/go/bin
 PATH=$(path_remove $GOPATH/bin):$GOPATH/bin
 
+# Add NPM binaries to path
+PATH=$(path_remove $HOME/.npm-global):$HOME/.npm-global
+
 # Add local user binaries to path
 PATH=$(path_remove $HOME/bin):$HOME/bin
