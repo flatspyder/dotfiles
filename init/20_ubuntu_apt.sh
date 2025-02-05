@@ -15,7 +15,6 @@ packages=(
   libssl-dev
   ngrep
   nmap
-  telnet
   tree
   zsh
 )

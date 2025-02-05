@@ -69,24 +69,18 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 unset path_file
 
-alias adb=$ANDROID_HOME/platform-tools/adb
-
 # Set the list of directories that Zsh searches for programs.
 # export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 path=(
   /usr/local/{bin,sbin}
   /usr/local/go/bin
-  /usr/local/opt/ruby/bin
-  /usr/local/lib/python2.7/site-packages
-  /usr/local/share/npm/bin
   /usr/{bin,sbin}
   /{bin,sbin}
+  /opt/homebrew/bin
   $HOME/.dotfiles/bin
   $HOME/bin
   $HOME/.local/bin
   $HOME/src/gocode/bin
-  $HOME/.npm-global/bin
-  $HOME/src/flutter/bin
   $path
 )
 
@@ -106,20 +100,6 @@ fi
 # Create Go path for source code
 export GOPATH=$HOME/src/gocode
 
-# Virtualenv should use Distribute instead of legacy setuptools
-export VIRTUALENV_DISTRIBUTE=true
-
-# Centralized location for new virtual environments
-export PIP_VIRTUALENV_BASE=$HOME/Virtualenvs
-
-# Pip should only run if there is a virtualenv currently activated
-#export PIP_REQUIRE_VIRTUALENV=true
-
-# cache pip-installed packages to avoid re-downloading
-export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-
 # Use Anaconda to Path
-condaenv="$HOME/anaconda2/etc/profile.d/conda.sh"
-[[ -f "$condaenv" ]] && source $condaenv
 condaenv="$HOME/miniconda3/etc/profile.d/conda.sh"
 [[ -f "$condaenv" ]] && source $condaenv

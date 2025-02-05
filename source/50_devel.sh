@@ -35,3 +35,11 @@ function loc() {
 function openfiles() {
   sudo dtrace -n 'syscall::open*:entry { printf("%s %s",execname,copyinstr(arg0)); }'
 }
+
+function serve() {
+  local port=9000
+  if [[ $1 =~ ^[0-9]+$ ]]; then
+    port="$1"
+  fi
+  python3 -m http.server "$port"
+}

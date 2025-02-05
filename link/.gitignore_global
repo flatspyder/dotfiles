@@ -55,5 +55,14 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+# Vim
+.swp
+.swo
+.*.swp
+.*.swo
+
+# VS Code
+.vscode
+
 # NPM
 .npmignore

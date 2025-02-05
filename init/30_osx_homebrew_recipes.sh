@@ -10,11 +10,7 @@ recipes=(
   lesspipe
   ngrep
   nmap
-  protobuf
-  python
   tree
-  vim
-  zsh
 )
 
 brew_install_recipes
