@@ -516,7 +516,10 @@ function psu {
   ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
 }
 
-
-function diff {
-  git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
-}
+# The following function overrides the system 'diff' command with 'git diff'.
+# This can be useful, but also surprising and can break scripts.
+# It is disabled by default. Uncomment to enable.
+#
+# function diff {
+#   git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
+# }

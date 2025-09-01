@@ -15,7 +15,15 @@ fi
 fpath=("${0:h}/completion/src" $fpath)
 
 # Load and initialize the completion system ignoring insecure directories.
-autoload -Uz compinit && compinit -i
+# We speed up compinit by avoiding a full re-initialization on every startup.
+# A new .zcompdump file is generated when one doesn't exist, or if it's older
+# than a day.
+autoload -Uz compinit
+if [[ -s "${ZDOTDIR:-$HOME}/.zcompdump" && -z "${ZDOTDIR:-$HOME}/.zcompdump"(m+1) ]]; then
+  compinit -i
+else
+  compinit -C -i
+fi
 
 #
 # Options
@@ -91,12 +99,17 @@ zstyle ':completion:*:history-words' menu yes
 # Environmental Variables
 zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
 
-# Populate hostname completion.
-zstyle -e ':completion:*:hosts' hosts 'reply=(
-  ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
-  ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
-  ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
-)'
+# Populate hostname completion by reading hosts files.
+# This can be slow, so it is disabled by default.
+# To enable, add the following to your .zshrc:
+# zstyle ':prezto:module:completion:hosts' populate 'yes'
+if zstyle -t ':prezto:module:completion:hosts' populate; then
+  zstyle -e ':completion:*:hosts' hosts 'reply=(
+    ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+    ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
+    ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+  )'
+fi
 
 # Don't complete uninteresting users...
 zstyle ':completion:*:*:*:users' ignored-patterns \

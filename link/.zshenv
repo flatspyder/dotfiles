@@ -1,3 +1,7 @@
+# .zshenv is sourced on all invocations of the shell, both interactive and non-interactive.
+# It should be used for setting environment variables, not for anything that produces output
+# or assumes the shell is attached to a tty.
+
 # Defines environment variables.
 privenv="$HOME/.private-env"
 [[ -f "$privenv" ]] && source $privenv
@@ -69,23 +73,14 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 unset path_file
 
-alias adb=$ANDROID_HOME/platform-tools/adb
-
 # Set the list of directories that Zsh searches for programs.
-# export PYTHONPATH=/usr/local/lib/python2.7/site-packages
+# More specific paths are handled by source/20_path.sh, which is sourced in .zshrc.
 path=(
-  /usr/local/{bin,sbin}
-  /usr/local/go/bin
   /usr/local/opt/ruby/bin
-  /usr/local/lib/python2.7/site-packages
-  /usr/local/share/npm/bin
   /usr/{bin,sbin}
   /{bin,sbin}
   $HOME/.dotfiles/bin
-  $HOME/bin
   $HOME/.local/bin
-  $HOME/src/gocode/bin
-  $HOME/.npm-global/bin
   $HOME/src/flutter/bin
   $path
 )
@@ -119,7 +114,18 @@ export PIP_VIRTUALENV_BASE=$HOME/Virtualenvs
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
 
 # Use Anaconda to Path
-condaenv="$HOME/anaconda2/etc/profile.d/conda.sh"
-[[ -f "$condaenv" ]] && source $condaenv
-condaenv="$HOME/miniconda3/etc/profile.d/conda.sh"
-[[ -f "$condaenv" ]] && source $condaenv
+condaenv_anaconda="$HOME/anaconda2/etc/profile.d/conda.sh"
+condaenv_miniconda="$HOME/miniconda3/etc/profile.d/conda.sh"
+if [[ -f "$condaenv_anaconda" ]]; then
+  source "$condaenv_anaconda"
+elif [[ -f "$condaenv_miniconda" ]]; then
+  source "$condaenv_miniconda"
+fi
+unset condaenv_anaconda condaenv_miniconda
+
+# Perl 5
+PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;

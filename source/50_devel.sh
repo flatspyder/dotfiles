@@ -6,6 +6,10 @@ fi
 # Pretty print json
 alias json='python -m json.tool'
 
+if [[ -n "$ANDROID_HOME" ]]; then
+  alias adb="$ANDROID_HOME/platform-tools/adb"
+fi
+
 # Count code lines in some directory.
 # $ loc py js css
 # # => Lines of code for .py: 3781
