@@ -30,7 +30,8 @@ Plugin 'gmarik/Vundle.vim'
 " Terminal Vim with 256 colors colorscheme
 "Plugin 'fisadev/fisa-vim-colorscheme'
 " Base16 theme
-Plugin 'chriskempson/base16-vim'
+"Plugin 'chriskempson/base16-vim'
+Plugin 'joshdick/onedark.vim'
 
 " Python and PHP Debugger
 "Plugin 'fisadev/vim-debug.vim'
@@ -268,19 +269,24 @@ let g:tabman_toggle = 'tl'
 let g:tabman_focus  = 'tf'
 
 " use 256 colors when possible
-if &term =~? 'mlterm\|xterm\|screen-256'
-	let &t_Co = 256
-    let base16colorspace=256
+"if &term =~? 'mlterm\|xterm\|screen-256'
+"	let &t_Co = 256
+"    let base16colorspace=256
     " color
     " colorscheme fisa
     "set background=dark
     "colorscheme solarized
+"endif
+
+if (has("termguicolors"))
+    set termguicolors
 endif
+
 
 if filereadable(expand("~/.vimrc_background"))
     source ~/.vimrc_background
 else
-    colorscheme delek
+    colorscheme onedark
 endif
 
 " when scrolling, keep cursor 3 lines away from screen border
@@ -295,7 +301,7 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " vim-airline settings
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'solarized'
+let g:airline_theme = 'onedark'
 let g:airline#extensions#whitespace#enabled = 0
 
 " Just display branches, not hunks as well

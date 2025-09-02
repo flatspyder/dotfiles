@@ -1,10 +1,9 @@
-# Set GOROOT for AppEngine when using vim on Mac
-if is_osx; then 
-    alias appvim="export GOROOT=/usr/local/share/go-app-engine-64/goroot && mvim"
-fi
-
 # Pretty print json
 alias json='python -m json.tool'
+
+if [[ -n "$ANDROID_HOME" ]]; then
+  alias adb="$ANDROID_HOME/platform-tools/adb"
+fi
 
 # Count code lines in some directory.
 # $ loc py js css

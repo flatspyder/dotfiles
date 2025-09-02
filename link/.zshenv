@@ -1,3 +1,7 @@
+# .zshenv is sourced on all invocations of the shell, both interactive and non-interactive.
+# It should be used for setting environment variables, not for anything that produces output
+# or assumes the shell is attached to a tty.
+
 # Defines environment variables.
 privenv="$HOME/.private-env"
 [[ -f "$privenv" ]] && source $privenv
@@ -70,7 +74,7 @@ done
 unset path_file
 
 # Set the list of directories that Zsh searches for programs.
-# export PYTHONPATH=/usr/local/lib/python2.7/site-packages
+# More specific paths are handled by source/20_path.sh, which is sourced in .zshrc.
 path=(
   /usr/local/{bin,sbin}
   /usr/local/go/bin
@@ -78,7 +82,6 @@ path=(
   /{bin,sbin}
   /opt/homebrew/bin
   $HOME/.dotfiles/bin
-  $HOME/bin
   $HOME/.local/bin
   $HOME/src/gocode/bin
   $path

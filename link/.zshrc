@@ -127,18 +127,10 @@ source "$curr/source/50_ubuntu.sh"
 source "$curr/source/50_vcs.sh"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/oli/src/google-cloud-sdk/path.zsh.inc' ]; then source '/home/oli/src/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/oli/src/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/src/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/oli/src/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/oli/src/google-cloud-sdk/completion.zsh.inc'; fi
-
-if is_osx; then
-    source "$HOME/src/google-cloud-sdk/completion.zsh.inc"
-    source "$HOME/src/google-cloud-sdk/path.zsh.inc"
-fi
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/oligaymond/.cache/lm-studio/bin"
+if [ -f "$HOME/src/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/src/google-cloud-sdk/completion.zsh.inc"; fi
 
 # pnpm
 export PNPM_HOME="/Users/oligaymond/Library/pnpm"
