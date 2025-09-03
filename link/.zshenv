@@ -18,17 +18,8 @@ if [[ -z "$LANG" ]]; then
   eval "$(locale)"
 fi
 
-# Git log colors.
-zstyle -s ':prezto:module:git:log:medium' format '_git_log_medium_format' \
-  || _git_log_medium_format='%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
-zstyle -s ':prezto:module:git:log:oneline' format '_git_log_oneline_format' \
-  || _git_log_oneline_format='%C(green)%h%C(reset) %s%C(red)%d%C(reset)%n'
-zstyle -s ':prezto:module:git:log:brief' format '_git_log_brief_format' \
-  || _git_log_brief_format='%C(green)%h%C(reset) %s%n%C(blue)(%ar by %an)%C(red)%d%C(reset)%n'
-
-# Status
-zstyle -s ':prezto:module:git:status:ignore' submodules '_git_status_ignore_submodules' \
-  || _git_status_ignore_submodules='none'
+# The zstyle configurations below appeared to be remnants of a Prezto setup
+# that is no longer in use and have been removed for cleanliness.
 
 # Less.
 # -----
@@ -73,20 +64,12 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 unset path_file
 
-# Set the list of directories that Zsh searches for programs.
-# More specific paths are handled by source/20_path.sh, which is sourced in .zshrc.
-path=(
-  /usr/local/{bin,sbin}
-  /usr/local/go/bin
-  /usr/{bin,sbin}
-  /{bin,sbin}
-  /opt/homebrew/bin
-  $HOME/.dotfiles/bin
-  $HOME/.local/bin
-  $HOME/src/gocode/bin
-  $path
-)
+# Source the master path configuration file.
+if [[ -f "$HOME/.dotfiles/source/20_path.sh" ]]; then
+  source "$HOME/.dotfiles/source/20_path.sh"
+fi
 
+# Add paths from /etc/paths.d on systems that use it.
 for path_file in /etc/paths.d/*(.N); do
   path+=($(<$path_file))
 done
@@ -99,9 +82,6 @@ if [[ -d "$TMPDIR" ]]; then
     mkdir -p "$TMPPREFIX"
   fi
 fi
-
-# Create Go path for source code
-export GOPATH=$HOME/src/gocode
 
 # Use Anaconda to Path
 condaenv="$HOME/miniconda3/etc/profile.d/conda.sh"

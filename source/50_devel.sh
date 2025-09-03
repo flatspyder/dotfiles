@@ -25,9 +25,9 @@ function loc() {
     lines=`find-exec "*$ext" cat | wc -l`
     lines=${lines// /}
     total=$(($total + $lines))
-    echo "Lines of code for ${fg[blue]}$ext${reset_color}: ${fg[green]}$lines${reset_color}"
+    echo "Lines of code for $ext: $lines"
   done
-  echo "${fg[blue]}Total${reset_color} lines of code: ${fg[green]}$total${reset_color}"
+  echo "Total lines of code: $total"
 }
 
 # Monitor IO in real-time (open files etc).

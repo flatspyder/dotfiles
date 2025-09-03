@@ -14,88 +14,13 @@ fpath=("$curr/zsh" $fpath)
 autoload -Uz promptinit && promptinit
 prompt 'oligaymond'
 
-# OS detection
-function is_osx() {
-  [[ "$OSTYPE" =~ ^darwin ]] || return 1
-}
-function is_ubuntu() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
-}
-function get_os() {
-  for os in osx ubuntu; do
-    is_$os; [[ $? == ${1:-0} ]] && echo $os
-  done
-}
-
-# ==================================================================
-# = Aliases =
-# ==================================================================
-
-# Simple clear command.
-alias cl='clear'
-
-# Lists the ten most used commands.
-alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
-
-# ==================================================================
-# = Functions =
-# ==================================================================
-
-# Show how much RAM application uses.
-# $ ram safari
-# # => safari uses 154.69 MBs of RAM.
-function ram() {
-  local sum
-  local items
-  local app="$1"
-  if [ -z "$app" ]; then
-    echo "First argument - pattern to grep from processes"
-  else
-    sum=0
-    for i in `ps aux | grep -i "$app" | grep -v "grep" | awk '{print $6}'`; do
-      sum=$(($i + $sum))
-    done
-    sum=$(echo "scale=2; $sum / 1024.0" | bc)
-    if [[ $sum != "0" ]]; then
-      echo "${fg[blue]}${app}${reset_color} uses ${fg[green]}${sum}${reset_color} MBs of RAM."
-    else
-      echo "There are no processes with pattern '${fg[blue]}${app}${reset_color}' are running."
-    fi
-  fi
-}
-
-function size() {
-  # du -sh "$@" 2>&1 | grep -v '^du:' | sort -nr
-  du -shck "$@" | sort -rn | awk '
-      function human(x) {
-          s="kMGTEPYZ";
-          while (x>=1000 && length(s)>1)
-              {x/=1024; s=substr(s,2)}
-          return int(x+0.5) substr(s,1,1)
-      }
-      {gsub(/^[0-9]+/, human($1)); print}'
-}
-
-# $ git log --no-merges --pretty=format:"%ae" | stats
-# # => 514 a@example.com
-# # => 200 b@example.com
-function stats() {
-  sort | uniq -c | sort -r
-}
-
-# Shortcut for searching commands history.
-# hist git
-function hist() {
-  history 0 | grep $@
-}
-
-# $ retry ping google.com
-function retry() {
-  echo Retrying "$@"
-  $@
-  sleep 1
-  retry $@
-}
+# Source shared aliases and functions.
+if [[ -f "$curr/source/50_aliases.sh" ]]; then
+  source "$curr/source/50_aliases.sh"
+fi
+if [[ -f "$curr/source/50_functions.sh" ]]; then
+  source "$curr/source/50_functions.sh"
+fi
 
 # Default emacs command line mode
 bindkey -e
@@ -115,31 +40,54 @@ bindkey '^J'      backward-kill-line            # ctrl+j     delete everything b
 bindkey "^R" history-incremental-pattern-search-backward
 
 # ==================================================================
-# = Shared source files =
+# = Source Shared Files =
 # ==================================================================
+# Source a curated list of shared files.
+local files_to_source=(
+  # Core setup
+  "00_dotfiles.sh"
+  # Note: 20_path.sh is sourced in .zshenv
 
-source "$curr/source/50_devel.sh"
-source "$curr/source/50_editor.sh"
-source "$curr/source/50_file.sh"
-source "$curr/source/50_net.sh"
-source "$curr/source/50_osx.sh"
-source "$curr/source/50_ubuntu.sh"
-source "$curr/source/50_vcs.sh"
+  # Shared configurations (already sourced above, but let's be explicit)
+  # "50_aliases.sh"
+  # "50_functions.sh"
+
+  # Other shared configurations
+  "50_editor.sh"
+  "50_file.sh"
+  "50_vcs.sh"
+  "50_devel.sh"
+  "50_net.sh"
+
+  # OS-specific configurations (with guards inside)
+  "50_osx.sh"
+  "50_ubuntu.sh"
+)
+
+for file in "${files_to_source[@]}"; do
+  if [[ -f "$curr/source/$file" ]]; then
+    source "$curr/source/$file"
+  fi
+done
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/oli/src/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/src/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/src/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/src/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/src/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/src/google-cloud-sdk/completion.zsh.inc"; fi
 
 # pnpm
-export PNPM_HOME="/Users/oligaymond/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Add VS Code to path
+if [ -d "$HOME/Applications/Visual Studio Code.app" ]; then
+    export PATH="$PATH:$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
+
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
-
-export PATH="\$PATH:~/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
