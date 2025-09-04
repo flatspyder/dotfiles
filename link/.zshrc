@@ -142,4 +142,4 @@ esac
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
 
-export PATH="\$PATH:~/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$PATH:$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
