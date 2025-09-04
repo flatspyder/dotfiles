@@ -1,3 +1,6 @@
+# Only run in Bash
+[ -n "$BASH_VERSION" ] || return 0
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
 

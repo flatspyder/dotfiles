@@ -1,5 +1,8 @@
 # History settings
 
+# Only run in Bash
+[ -n "$BASH_VERSION" ] || return 0
+
 # Allow use to re-edit a failed history substitution.
 shopt -s histreedit
 # History expansions will be verified before execution.
