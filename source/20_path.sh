@@ -1,24 +1,30 @@
-typeset -gU path PATH
+# Cross-shell PATH configuration
 
-# APPLE, Y U PUT /usr/bin B4 /usr/local/bin?!
+# Prepend directories to PATH if they exist and are not already present
+path_prepend() {
+  for dir in "$@"; do
+    [ -d "$dir" ] || continue
+    case ":$PATH:" in
+      *":$dir:") ;;
+      *) PATH="$dir:$PATH" ;;
+    esac
+  done
+}
+
+# Platform specific paths
 if is_osx; then
-  path=(
-    /usr/local/bin
-    /usr/local/sbin
-    $HOME/miniconda3/bin
-    $path
-  )
+  path_prepend /usr/local/bin /usr/local/sbin "$HOME/miniconda3/bin"
 fi
 
-# Add Go binaries to path
-path=(
-  /usr/local/go/bin
-  $GOPATH/bin
-  $path
-)
+# Language/tooling paths
+path_prepend /usr/local/go/bin "$GOPATH/bin"
 
-# Add local user binaries to path
-path=(
-  $HOME/bin
-  $path
-)
+# User bins
+path_prepend "$HOME/bin"
+
+export PATH
+
+# Keep zsh's path array in sync when running under zsh
+if [ -n "$ZSH_VERSION" ]; then
+  path=(${(s/:/)PATH})
+fi

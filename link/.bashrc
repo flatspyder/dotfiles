@@ -1,25 +1,30 @@
-# Where the magic happens
-export DOTFILES=~/.dotfiles
+# ~/.bashrc - shared shell configuration
 
-# Add binaries into the path
-PATH=$DOTFILES/bin:$PATH
-export PATH
+export DOTFILES="$HOME/.dotfiles"
 
-# Source all files in "source"
-function src() {
-  local file
-  if [[ "$1" ]]; then
+# Load helper functions and path tweaks early
+[ -f "$DOTFILES/source/00_dotfiles.sh" ] && source "$DOTFILES/source/00_dotfiles.sh"
+[ -f "$DOTFILES/source/20_path.sh" ] && source "$DOTFILES/source/20_path.sh"
+
+
+# Helper to (re)source configuration snippets
+src() {
+  if [ -n "$1" ]; then
     source "$DOTFILES/source/$1.sh"
   else
-    for file in $DOTFILES/source/*; do
+    for file in "$DOTFILES"/source/*.sh; do
+      [ -f "$file" ] || continue
+      case "$(basename "$file")" in
+        00_dotfiles.sh|20_path.sh) continue ;;
+      esac
       source "$file"
     done
   fi
 }
 
-# Run dotfiles script, then source.
-function dotfiles() {
-  $DOTFILES/bin/dotfiles "$@" && src
+dotfiles() {
+  "$DOTFILES/bin/dotfiles" "$@" && src
 }
 
+# Initial load
 src

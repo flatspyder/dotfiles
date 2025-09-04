@@ -1,4 +1,7 @@
 # My awesome bash prompt
+
+# Only run in Bash
+[ -n "$BASH_VERSION" ] || return 0
 #
 # Copyright (c) 2012 "Cowboy" Ben Alman
 # Licensed under the MIT license.
