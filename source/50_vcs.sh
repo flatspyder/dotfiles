@@ -5,8 +5,9 @@ alias ga='git add'
 alias gp='git push'
 alias gpa='gp --all'
 alias gu='git pull'
-alias gf='git fetch'
-alias gl='git log --no-merges'
+alias gfe='git fetch'
+alias gl='git log --no-merges --pretty="format:%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B"'
+alias gls='git log --no-merges --pretty="format:%C(yellow)%h %C(blue)%>(12)%ar %Cgreen%<(7)%aN %Creset%s"'
 alias gg='gl --decorate --oneline --graph --date-order --all'
 alias gs='git status --short'
 alias gst='git status'
@@ -23,7 +24,7 @@ function gca() {
 }
 alias gb='git branch'
 alias gba='git branch -a'
-function gco() { git checkout "${@:-master}"; } # Checkout master by default
+function gco() { git checkout "${@:-main}"; } # Checkout main by default
 alias gcb='gco -b'
 alias gr='git remote'
 alias grv='gr -v'

@@ -18,12 +18,24 @@ fpath=("${0:h}/completion/src" $fpath)
 # We speed up compinit by avoiding a full re-initialization on every startup.
 # A new .zcompdump file is generated when one doesn't exist, or if it's older
 # than a day.
+
+# Where we keep completion caches
+ZCACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+mkdir -p "$ZCACHEDIR"
+
+# Initialize completion, rebuilding the dump at most daily
 autoload -Uz compinit
-if [[ -s "${ZDOTDIR:-$HOME}/.zcompdump" && -z "${ZDOTDIR:-$HOME}/.zcompdump"(m+1) ]]; then
-  compinit -i
+DUMP="$ZCACHEDIR/zcompdump-$ZSH_VERSION"
+if [[ -s "$DUMP" && -z "$DUMP"(m+1) ]]; then
+  compinit -d "$DUMP" -i         # ignore prompts; fix perms separately
 else
-  compinit -C -i
+  compinit -C -d "$DUMP" -i      # (re)create the dump when missing/stale
 fi
+
+# Compile the dump in the background for faster next startups
+{
+  [[ -e "$DUMP" && ( "$DUMP" -nt "$DUMP.zwc" || ! -s "$DUMP.zwc" ) ]] && zcompile "$DUMP"
+} &!
 
 #
 # Options
@@ -42,9 +54,9 @@ unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 # Styles
 #
 
-# Use caching to make completion for cammands such as dpkg and apt usable.
+# Use caching to make completion for commands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path "${ZDOTDIR:-$HOME}/.zcompcache"
+zstyle ':completion::complete:*' cache-path "$ZCACHEDIR/zcompcache"
 
 # Case-insensitive (all), partial-word, and then substring completion.
 if zstyle -t ':prezto:module:completion:*' case-sensitive; then
@@ -98,6 +110,35 @@ zstyle ':completion:*:history-words' menu yes
 
 # Environmental Variables
 zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
+
+# Git aliases
+compdef _git g=git
+compdef _git gco=git-checkout
+compdef _git gb=git-branch
+compdef _git gst=git-status
+compdef _git gs=git-status
+compdef _git gd=git-diff
+compdef _git gds=git-diff
+compdef _git gdc=git-diff
+compdef _git gp=git-push
+compdef _git gpa=git-push
+compdef _git gu=git-pull
+compdef _git gfe=git-fetch
+compdef _git gl=git-log
+compdef _git gg=git-log
+compdef _git gr=git-remote
+compdef _git grv=git-remote
+compdef _git grr=git-remote
+compdef _git gcl=git-clone
+compdef _git gc=git-commit
+compdef _git gca=git-commit
+compdef _git ged=git-diff
+compdef _git gf=git-log
+compdef _git gf1=git-log
+compdef _git gf2=git-log
+compdef _git gf3=git-log
+compdef _git gf4=git-log
+compdef _git gf5=git-log
 
 # Populate hostname completion by reading hosts files.
 # This can be slow, so it is disabled by default.
