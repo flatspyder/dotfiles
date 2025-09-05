@@ -1,14 +1,8 @@
 #
-# Initializes Prezto.
+# Shell initialization.
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
-
-# Set case-sensitivity for completion, history lookup, etc.
-zstyle ':prezto:*:*' case-sensitive 'no'
-
-# Color output (auto set to 'no' on dumb terminals).
-zstyle ':prezto:*:*' color 'yes'
 
 #
 # Sets directory options and defines directory aliases.
@@ -79,24 +73,18 @@ unsetopt CHECK_JOBS       # Don't report on jobs when shell exit.
 #
 # Grep
 #
-
-if zstyle -t ':prezto:environment:grep' color; then
-  export GREP_COLOR='37;45'
-fi
+export GREP_COLOR='37;45'
 
 #
 # Termcap
 #
-
-if zstyle -t ':prezto:environment:termcap' color; then
-  export LESS_TERMCAP_mb=$'\E[01;31m'      # Begins blinking.
-  export LESS_TERMCAP_md=$'\E[01;31m'      # Begins bold.
-  export LESS_TERMCAP_me=$'\E[0m'          # Ends mode.
-  export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
-  export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
-  export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
-  export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
-fi
+export LESS_TERMCAP_mb=$'\E[01;31m'      # Begins blinking.
+export LESS_TERMCAP_md=$'\E[01;31m'      # Begins bold.
+export LESS_TERMCAP_me=$'\E[0m'          # Ends mode.
+export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
+export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
+export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
+export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
 
 
 
@@ -227,8 +215,8 @@ unset color{s,} index
 
 # Sets the terminal or terminal multiplexer window title.
 function set-window-title {
-  local title_format{,ted}
-  zstyle -s ':prezto:module:terminal:window-title' format 'title_format' || title_format="%s"
+  local title_format title_formatted
+  title_format="%s"
   zformat -f title_formatted "$title_format" "s:$argv"
 
   if [[ "$TERM" == screen* ]]; then
@@ -242,8 +230,8 @@ function set-window-title {
 
 # Sets the terminal tab title.
 function set-tab-title {
-  local title_format{,ted}
-  zstyle -s ':prezto:module:terminal:tab-title' format 'title_format' || title_format="%s"
+  local title_format title_formatted
+  title_format="%s"
   zformat -f title_formatted "$title_format" "s:$argv"
 
   printf "\e]1;%s\a" ${(V%)title_formatted}
@@ -330,18 +318,6 @@ function term() {
 
 term
 
-# Set up non-Apple terminals.
-# if zstyle -t ':prezto:module:terminal' auto-title \
-#   && ( ! [[ -n "$STY" || -n "$TMUX" ]] )
-# then
-#   # Sets the tab and window titles before the prompt is displayed.
-#   add-zsh-hook precmd _terminal-set-titles-with-path
-
-#   # Sets the tab and window titles before command execution.
-#   add-zsh-hook preexec _terminal-set-titles-with-command
-# fi
-
-
 #
 # Defines general aliases and functions.
 #
@@ -409,30 +385,22 @@ if is-callable 'dircolors'; then
   # GNU Core Utilities
   alias ls='ls --group-directories-first'
 
-  if zstyle -t ':prezto:module:utility:ls' color; then
-    if [[ -s "$HOME/.dir_colors" ]]; then
-      eval "$(dircolors "$HOME/.dir_colors")"
-    else
-      eval "$(dircolors)"
-    fi
-
-    alias ls="$aliases[ls] --color=auto"
+  if [[ -s "$HOME/.dir_colors" ]]; then
+    eval "$(dircolors "$HOME/.dir_colors")"
   else
-    alias ls="$aliases[ls] -F"
+    eval "$(dircolors)"
   fi
+
+  alias ls="$aliases[ls] --color=auto"
 else
   # BSD Core Utilities
-  if zstyle -t ':prezto:module:utility:ls' color; then
-    # Define colors for BSD ls.
-    export LSCOLORS='exfxcxdxbxGxDxabagacad'
+  # Define colors for BSD ls.
+  export LSCOLORS='exfxcxdxbxGxDxabagacad'
 
-    # Define colors for the completion system.
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
+  # Define colors for the completion system.
+  export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 
-    alias ls='ls -G'
-  else
-    alias ls='ls -F'
-  fi
+  alias ls='ls -G'
 fi
 
 alias l='ls -1A'         # Lists in one column, hidden files.

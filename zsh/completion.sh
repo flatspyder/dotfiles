@@ -59,13 +59,8 @@ zstyle ':completion::complete:*' use-cache on
 zstyle ':completion::complete:*' cache-path "$ZCACHEDIR/zcompcache"
 
 # Case-insensitive (all), partial-word, and then substring completion.
-if zstyle -t ':prezto:module:completion:*' case-sensitive; then
-  zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-  setopt CASE_GLOB
-else
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-  unsetopt CASE_GLOB
-fi
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+unsetopt CASE_GLOB
 
 # Group matches and describe.
 zstyle ':completion:*:*:*:*:*' menu select
@@ -139,18 +134,6 @@ compdef _git gf2=git-log
 compdef _git gf3=git-log
 compdef _git gf4=git-log
 compdef _git gf5=git-log
-
-# Populate hostname completion by reading hosts files.
-# This can be slow, so it is disabled by default.
-# To enable, add the following to your .zshrc:
-# zstyle ':prezto:module:completion:hosts' populate 'yes'
-if zstyle -t ':prezto:module:completion:hosts' populate; then
-  zstyle -e ':completion:*:hosts' hosts 'reply=(
-    ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
-    ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
-    ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
-  )'
-fi
 
 # Don't complete uninteresting users...
 zstyle ':completion:*:*:*:users' ignored-patterns \
