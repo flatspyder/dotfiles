@@ -54,8 +54,10 @@ function loc() {
 
   for ext in "${exts[@]}"; do
     lines=$(find . "${find_opts[@]}" -type f -name "*$ext" -exec wc -l {} + 2>/dev/null | awk '{s+=$1} END{print s+0}')
-    total=$((total + lines))
-    echo "Lines of code for ${fg[blue]}$ext${reset_color}: ${fg[green]}$lines${reset_color}"
+    if (( lines > 0 )); then
+      total=$((total + lines))
+      echo "Lines of code for ${fg[blue]}$ext${reset_color}: ${fg[green]}$lines${reset_color}"
+    fi
   done
   echo "${fg[blue]}Total${reset_color} lines of code: ${fg[green]}$total${reset_color}"
 }
