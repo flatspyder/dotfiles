@@ -48,10 +48,6 @@ Plug 'jiangmiao/auto-pairs'          " modern autopairs
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
 " Linting / Formatting / LSP bridge
 Plug 'dense-analysis/ale'
 
@@ -74,6 +70,7 @@ syntax on
 " UI / Look & feel
 " -----------------------------
 set number
+"set relativenumber "useful for offsets
 set laststatus=2
 set signcolumn=yes
 set scrolloff=3
@@ -124,8 +121,13 @@ autocmd FileType html,htmldjango,css,javascript setlocal shiftwidth=2 tabstop=2 
 set smartindent
 set autoindent
 
-set wrap
-set textwidth=79
+set textwidth=80
+set nowrap
+set list
+set listchars=tab:»·,trail:·,extends:›,precedes:‹,nbsp:␣
+set textwidth=0
+set colorcolumn=+1
+
 set formatoptions=qrn1
 
 " Search
@@ -136,6 +138,7 @@ set smartcase
 
 " Completion menu behavior (plays nicely with ALE completion)
 set wildmode=list:longest
+set wildignore+=*/node_modules/*,*/.git/*,*/dist/*,*/build/*,*/.venv/*,*/.mypy_cache/*,*/.pytest_cache/*,*/coverage/*
 set completeopt=menu,menuone,noselect
 
 " Clipboard (comment out if you don't want system clipboard by default)
@@ -153,7 +156,7 @@ let g:rooter_patterns = ['.git', '.hg', '.svn', 'pyproject.toml', 'setup.cfg', '
 " FZF: fast files & grep
 " -----------------------------
 if executable('rg')
-  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --glob\ \!\.git
   set grepformat=%f:%l:%c:%m
 endif
 
@@ -161,8 +164,36 @@ let mapleader = ","
 
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>r :Rg<CR>
+nnoremap <leader>fr :call fzf#vim#resume('rg')<CR>
+nnoremap <leader>fb :BLines<CR>
+nnoremap <leader>fc :Commands<CR>
+nnoremap <leader>fg :GFiles?<CR>
+nnoremap <leader>fm :Commits<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>h :Helptags<CR>
+
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+
+function! s:toggle_quickfix() abort
+  for win in range(1, winnr('$'))
+    if getwinvar(win, '&buftype') ==# 'quickfix'
+      cclose
+      return
+    endif
+  endfor
+  copen
+endfunction
+
+command! CopenToggle call s:toggle_quickfix()
+nnoremap <leader>qo :CopenToggle<CR>
+
+command! -nargs=0 RgResume call fzf#vim#resume('rg')
+
+nnoremap <leader>tw :setlocal wrap!<CR>
+nnoremap <leader>tl :setlocal list!<CR>
+nnoremap <leader>ts :setlocal spell!<CR>
+nnoremap <leader>tr :setlocal relativenumber!<CR>
 
 " Tab navigation (non-recursive, less intrusive than bare `map`)
 nnoremap <leader>t] :tabnext<CR>
@@ -187,6 +218,10 @@ let g:ale_fixers = {
 \ 'go': ['gofmt'],
 \ }
 
+let g:ale_python_auto_pipenv = 1
+let g:ale_python_auto_poetry = 1
+let g:ale_use_global_executables = 0
+
 " Choose linters / LSP backends
 let g:ale_linters = {
 \ 'python': ['ruff', 'mypy'],
@@ -203,13 +238,6 @@ nnoremap <silent> K :ALEHover<CR>
 
 " Virtualenv location (adjust to taste)
 let g:virtualenv_directory = '~/Virtualenvs'
-
-" -----------------------------
-" UltiSnips
-" -----------------------------
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " -----------------------------
 " Backups / swaps / undo
@@ -234,3 +262,4 @@ set undodir=~/.vim/tmp/undo//
 " - fzf respects .gitignore; ripgrep greatly speeds up search.
 " - ALE expects external tools: pip install black ruff mypy; npm i -g prettier eslint; Go ships gofmt.
 " -----------------------------
+"

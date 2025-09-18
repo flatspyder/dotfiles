@@ -1,8 +1,9 @@
 # Simple zsh prompt.
 #
-# dotfiles ❯ (default)
-# dotfiles master ❯ (in git repository)
-# root@serv dotfiles master ❯ (with SSH)
+# machine ❯ (default)
+# machine ❯  master (in git repository)
+# machine (venv) >  master (with virtualenv)
+# root@serv ❯  master (with SSH)
 #
 # * is prepended to git branch name if repo is dirty.
 # ❯ is red if previous command exit status was 1.
