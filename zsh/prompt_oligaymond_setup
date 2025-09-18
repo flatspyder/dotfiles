@@ -62,15 +62,12 @@ function list-files {
 }
 
 begin_with() {
-    local string="${1}"
-    shift
-    local element=''
-    for element in "$@"; do
-        if [[ "${string}" =~ "^${element}" ]]; then
-            return 0
-        fi
-    done
-    return 1
+  local s="$1"; shift
+  local e
+  for e in "$@"; do
+    [[ $s == ${e}* ]] && return 0
+  done
+  return 1
 }
 
 git_check_if_worktree() {
