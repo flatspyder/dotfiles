@@ -161,6 +161,14 @@ prompt_oligaymond_setup() {
   add-zsh-hook chpwd title_prompt
   add-zsh-hook chpwd git_check_if_worktree
 
+  # Ensure the git prompt is initialised for the current directory before the
+  # first precmd hook runs. Without this, shells started inside a git
+  # repository (for example via tools that spawn a subshell such as
+  # ``pipenv shell``) would not display the branch name until the first
+  # directory change triggered the ``chpwd`` hook.
+  git_check_if_worktree
+  git_status
+
   if [ -z $SSH_TTY ]; then
       ZSSH=
   else
