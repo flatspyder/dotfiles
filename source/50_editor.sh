@@ -8,7 +8,3 @@ if [[ -z "$SSH_TTY" ]] && is_osx; then
 else
   export VISUAL="$EDITOR -gf"
 fi
-
-alias q="$EDITOR"
-alias qv="q $DOTFILES/link/.{,g}vimrc +'cd $DOTFILES'"
-alias qs="q +'cd $DOTFILES'"
