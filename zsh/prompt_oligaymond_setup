@@ -132,7 +132,7 @@ git_status() {
         git_dirty
         
         if [[ -z "$git_dirty" ]]; then
-            git_prompt="%B%F{black}${git_branch} ${branch_symbol}%b%f"
+            git_prompt="%B%F{8}${git_branch} ${branch_symbol}%b%f"
         else
             git_prompt="%F{red}${git_branch} ${branch_symbol}%f"
         fi
