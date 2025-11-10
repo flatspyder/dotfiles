@@ -1,0 +1,61 @@
+#!/usr/bin/env swift
+
+import Foundation
+import Vision
+import UniformTypeIdentifiers
+
+func die(_ msg: String) -> Never {
+    fputs("ocr: \(msg)\n", stderr)
+    exit(1)
+}
+
+guard CommandLine.arguments.count == 2 else {
+    die("usage: ocr /path/to/image")
+}
+
+let url = URL(fileURLWithPath: CommandLine.arguments[1])
+
+// 1. Check file exists and is not a directory
+var isDir: ObjCBool = false
+guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir), !isDir.boolValue else {
+    die("'\(url.path)' does not exist or is a directory")
+}
+
+// 2. Check that it’s an image
+guard let contentType = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType else {
+    die("couldn't determine file type for '\(url.lastPathComponent)'")
+}
+
+if contentType == .pdf {
+    die("'\(url.lastPathComponent)' is a PDF. This tool only accepts image files.")
+}
+
+guard contentType.conforms(to: .image) else {
+    die("unsupported file type (\(contentType.identifier)). Please provide an image file.")
+}
+
+// 3. Configure the text recognition request
+let request = VNRecognizeTextRequest()
+request.automaticallyDetectsLanguage = true
+request.usesLanguageCorrection = true
+request.recognitionLevel = .accurate
+
+// 4. Run Vision on the file with proper error handling
+let handler = VNImageRequestHandler(url: url, options: [:])
+
+do {
+    try handler.perform([request])
+} catch {
+    die("Vision failed to process '\(url.lastPathComponent)': \(error.localizedDescription)")
+}
+
+// 5. Print results or exit with a clear message
+guard let observations = request.results, !observations.isEmpty else {
+    die("couldn't recognize any text")
+}
+
+for observation in observations {
+    if let candidate = observation.topCandidates(1).first {
+        print(candidate.string)
+    }
+}

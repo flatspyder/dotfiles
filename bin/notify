@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# Send a desktop notification.
+# Cross-platform for Linux (with notify-send) and macOS.
+#
+# Usage: ./notify.builder [title] [description]
+
+title="${1:-Notification}"
+
+if [[ -n "$2" ]]; then
+  description="$2"
+else
+  # Generate an ISO 8601 timestamp,
+  # This handles differences between GNU date (Linux) and BSD date (macOS).
+  if date --version >/dev/null 2>&1; then # GNU date
+    description=$(date --iso-8601=seconds)
+  else # BSD date
+    description=$(date +"%d %b %H:%M")
+  fi
+fi
+
+# Try notify-send (for Linux)
+if command -v notify-send >/dev/null; then
+  notify-send --expire-time=5000 "$title" "$description"
+  exit 0
+fi
+
+# Try osascript (for macOS)
+if command -v osascript >/dev/null; then
+  osascript -e "display notification \"$description\" with title \"$title\""
+  exit 0
+fi
+
+echo "can't send notifications" >&2
+exit 1
