@@ -106,3 +106,7 @@ export GOPATH=$HOME/src/gocode
 # Use Anaconda to Path
 condaenv="$HOME/miniconda3/etc/profile.d/conda.sh"
 [[ -f "$condaenv" ]] && source $condaenv
+
+# Use Android Studio for Java Home
+export JAVA_HOME="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
